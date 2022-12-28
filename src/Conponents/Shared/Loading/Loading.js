@@ -1,18 +1,20 @@
 import React from 'react';
-import {MagnifyingGlass  } from 'react-loader-spinner'
+import {CirclesWithBar} from 'react-loader-spinner'
 
 const Loading = () => {
     return (
         <div>
-            <MagnifyingGlass
-  visible={true}
-  height="80"
-  width="80"
-  ariaLabel="MagnifyingGlass-loading"
+            <CirclesWithBar
+  height="100"
+  width="100"
+  color="#4fa94d"
   wrapperStyle={{}}
-  wrapperClass="MagnifyingGlass-wrapper"
-  glassColor = '#c0efff'
-  color = '#e15b64'
+  wrapperClass=""
+  visible={true}
+  outerCircleColor=""
+  innerCircleColor=""
+  barColor=""
+  ariaLabel='circles-with-bar-loading'
 />
         </div>
     );

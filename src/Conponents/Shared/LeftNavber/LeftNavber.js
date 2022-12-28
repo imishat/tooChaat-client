@@ -1,21 +1,28 @@
 import React from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
 const LeftNavber = ({ setDrawer }) => {
     return (
-        <div className='flex justify-between items-center lg:hidden'>
-        <img src=''alt="" className='w-2/12' />
-    <div className="">
-      <label
-        htmlFor="drawer"
-        tabIndex={2}
-        className="btn btn-ghost lg:hidden"
-        onClick={() => setDrawer(true)}
-      >
-        <GiHamburgerMenu className='text-3xl'/>
-      </label>
-    </div>
-  </div>
+        <div className='flex justify-between items-center px-5 py-2 rounded-lg lg:hidden border-b-2 border-gray-500'>
+
+            <Link to="/" className="flex justify-center items-center gap-3 text-xl hover:text-blue-600 duration-1000 font-semibold p-1 rounded-xl text-white">
+
+                <img src={logo} className='md:w-12 md:h-12 h-8 w-8' alt="logo" />
+
+                <span>Tochat</span>
+
+            </Link>
+
+            <label htmlFor="left-drawer" tabIndex={2} className="btn btn-ghost lg:hidden text-white  transition-all border-0 duration-1000  bg ">
+
+
+                <GiHamburgerMenu className='text-2xl' />
+
+            </label>
+
+        </div>
     );
 };
 
