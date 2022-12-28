@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "jawandarajbir.react-vscode-extension-pack",
+    "xabikos.reactsnippets",
+    "christian-kohler.path-intellisense",
+    "steoates.autoimport",
+    "formulahendry.auto-rename-tag"
+  ]
+}

@@ -56,7 +56,13 @@ const Main = () => {
   const userSign = <>
 
     <li className='bg-blue-900 text-white rounded-lg hover:bg-gray-400 hover:text-black duration-1000 pointer'>
-      <NavLink to="/signin" className='flex gap-2 px-4 py-2 justify-center items-center'>Sign In</NavLink>
+      <div  className='flex gap-2 px-4 py-2 justify-center items-center'>
+      <label htmlFor="login">
+                <li className="px-4 py-3 bg-blue-800 text-white font-semibold text-center rounded-lg cursor-pointer">
+                  Sign In
+                </li>
+              </label>
+      </div>
     </li>
 
     <li className='bg-blue-900 text-white rounded-lg hover:bg-gray-400 hover:text-black duration-1000 pointer'>
@@ -96,7 +102,7 @@ const Main = () => {
           id="left-drawer"
           type="checkbox"
           className="drawer-toggle"
-        // checked={drawer}
+     
         />
 
         <div className="drawer-content">
