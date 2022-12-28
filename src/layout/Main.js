@@ -10,6 +10,7 @@ import { MdOutlineExplore } from "react-icons/md";
 import { BsBookmark } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { TbBrandMessenger } from "react-icons/tb";
+import Footer from '../Conponents/Footer/Footer';
 
 
 const Main = () => {
@@ -128,6 +129,7 @@ const Main = () => {
         </div>
 
       </nav>
+      <Footer></Footer>
 
 
 
