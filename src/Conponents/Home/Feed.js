@@ -1,11 +1,14 @@
 import React from 'react';
+import Post from './PostItem/Post';
+import ShowPost from './ShowPost/ShowPost';
 
 
 
 const Feed = () => {
     return (
         <div>
-            {/* <Lottie animationData={err} loop={true} className='w-96 mx-auto' /> */}
+           <Post></Post>
+           <ShowPost></ShowPost>
 
         </div>
     );

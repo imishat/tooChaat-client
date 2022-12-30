@@ -35,7 +35,7 @@ const Head = () => {
                                     `}
 
                             >
-                                Feed
+                                Media
                             </Link>
 
                         </li>
@@ -60,7 +60,7 @@ const Head = () => {
                                     `}
                                 
                             >
-                                People
+                                Message
                             </Link>
 
                         </li>
@@ -85,7 +85,7 @@ const Head = () => {
                                     `}
                                 
                             >
-                                Trending
+                               About
                             </Link>
 
                         </li>

@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import LeftNavber from '../Conponents/Shared/LeftNavber/LeftNavber';
-import { AiFillHome, AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
 
 import { CgProfile } from "react-icons/cg";
 
 import { MdOutlineExplore } from "react-icons/md";
 
-import { BsBookmark } from "react-icons/bs";
+import { BsBookmark, BsThreeDots } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { TbBrandMessenger } from "react-icons/tb";
 import Footer from '../Conponents/Footer/Footer';
+import { AuthContext } from '../Provider/AuthProvider';
 
 
 const Main = () => {
- 
-
+  const { user, logOut } = useContext(AuthContext);
+  const signOut = () => {
+    logOut()
+    .then(() => { })
+    .catch(err => console.log(err));
+  };
 
   const menuItems = <>
 
@@ -55,39 +60,65 @@ const Main = () => {
 
   const userSign = <>
 
-    <li className='bg-blue-900 text-white rounded-lg hover:bg-gray-400 hover:text-black duration-1000 pointer'>
+    {/* <li className='bg-blue-900 text-white rounded-lg hover:bg-gray-400 hover:text-black duration-1000 pointer'>
       <div  className='flex gap-2 px-4 py-2 justify-center items-center'>
       <label htmlFor="login">
-                <li className="px-4 py-3 bg-blue-800 text-white font-semibold text-center rounded-lg cursor-pointer">
+                <li className="">
                   Sign In
                 </li>
               </label>
       </div>
     </li>
 
-    <li className='bg-blue-900 text-white rounded-lg hover:bg-gray-400 hover:text-black duration-1000 pointer'>
-      <NavLink to="/signup" className='flex gap-2 px-4 py-2 justify-center items-center'>Sign Up</NavLink>
-    </li>
-
+    
     <li className='bg-blue-900 text-white rounded-lg hover:bg-gray-400 hover:text-black duration-1000 pointer'>
       <NavLink to="/signout" className='flex gap-2 px-4 py-2 justify-center items-center'>Sign Out</NavLink>
-    </li>
+    </li> */}
+      <div>
+              {user?.uid ? (
+                <>
+                  <div className="dropdown dropdown-top w-full cursor-pointer">
+                    <label tabIndex={0} className="m-1">
+                      <div className="flex justify-between items-center w-full cursor-pointer">
+                        <div className="flex justify-center items-center">
+                          <div className="avatar online">
+                            <div className="w-14 rounded-full">
+                              <img src={user?.photoURL} alt="" />
+                            </div>
+                          </div>
+                          <div className="ml-3">
+                            <p className="font-semibold text-xl">
+                              {user?.displayName}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="hover:bg-white p-4 rounded-full transition-colors duration-500 ">
+                          <BsThreeDots />
+                        </span>
+                      </div>
+                    </label>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                      <li>
+                        <span onClick={signOut}>Log Out</span>
+                      </li>
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <label htmlFor="login">
+                    <li className="px-4 py-3 bg-blue-800 text-white font-semibold text-center rounded-lg cursor-pointer">
+                      Sign In
+                    </li>
+                  </label>
+                </>
+              )}
+            </div>
 
-    <Link to="/" className='flex justify-center items-center'>
-
-      {/* {user?.photoURL ?
-
-            <img src={user?.photoURL} alt='Profile'
-                title={user?.displayName}
-                className='h-12 w-12 rounded-full border-2 border-white'
-
-                onError={({ currentTarget }) => {
-                    currentTarget.onerror = null;  // prevents looping
-                    currentTarget.src = "https://img.icons8.com/clouds/100/000000/no-image.png";
-                }}
-            /> */}
-
-    </Link>
+ 
 
   </>
 

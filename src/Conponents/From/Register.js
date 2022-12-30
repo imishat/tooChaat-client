@@ -1,42 +1,154 @@
-import React from 'react';
+import { GoogleAuthProvider } from 'firebase/auth';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../../Provider/AuthProvider';
+
+
+
 
 const Register = ({ setIsModal, isModal }) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm();
-    
-      const imgbb ='ab7a608b3c4591a0ef2f1f982f1236d4';
-    
-      const onSubmit = (data) => {
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const imgbb = process.env.REACT_APP_imagebbAPI;
+  const googleProvider = new GoogleAuthProvider();
+
+  const { createUser, updateUser, googleUser, verifyUser, loading } =
+    useContext(AuthContext);
+
+  const onSubmit = (data) => {
+    // console.log(data);
+    const image = data.photo[0];
+    // console.log(image);
+    const formData = new FormData();
+    formData.append("image", image);
+    // console.log(formData);
+    const url = `https://api.imgbb.com/1/upload?key=${imgbb}`;
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((imgbb) => {
+        if (imgbb.success) {
+          //   console.log(imgbb);
+          createUser(data.email, data.password)
+            .then((result) => {
+              const user = result.user;
+              //   console.log(user);
+              const userInfo = {
+                displayName: data.name,
+                photoURL: imgbb.data.url,
+              };
+              updateUser(userInfo)
+                .then((result) => {
+                  //   console.log(userInfo);
+                  toast.success("Account Created Successfully");
+                  verifyUser().then(() => {
+                    saveUser(data.name, data.email, userInfo.photoURL);
+                    toast.success("Verify Email sent, Check your spam folder");
+                  });
+                  reset();
+                })
+                .catch((err) => console.error(err));
+            })
+            .catch((err) => console.error(err));
+        }
+      });
+  };
+
+  const googleHandler = () => {
+    googleUser(googleProvider)
+      .then((result) => {
+        const user = result.user;
+        saveGoogleUser(user.displayName, user.emaigil, user.photoURL);
+        console.log(user);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const saveUser = (
+    userName,
+    userEmail,
+    userPhoto,
+    university = "",
+    address = "",
+    Phone = "",
+    Birthday = "",
+    Gender = ""
+  ) => {
+    const user = {
+      userName,
+      userEmail,
+      userPhoto,
+      university,
+      address,
+      Phone,
+      Birthday,
+      Gender,
+    };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
         console.log(data);
-        const image = data.photo[0];
-        // console.log(image);
-        const formData = new FormData();
-        formData.append("image", image);
-        // console.log(formData);
-        const url = `https://api.imgbb.com/1/upload?key=${imgbb}`;
-        fetch(url, {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then((imgbb) => {
-              if (imgbb.success) {
-                  console.log('success');
-              }
-          });
-      };
+      });
+  };
+
+  const saveGoogleUser = (
+    userName,
+    userEmail,
+    userPhoto,
+    university = "",
+    address = "",
+    Phone = "",
+    Birthday = "",
+    Gender = ""
+  ) => {
+    const user = {
+      userName,
+      userEmail,
+      userPhoto,
+      university,
+      address,
+      Phone,
+      Birthday,
+      Gender,
+    };
+    fetch("http://localhost:5000/users", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log("save-user = google", data);
+        if (data.acknowledged) {
+          toast.success(`Google Login Successful, 'Email' = ${user.email}`);
+
+          // navigate(from, { replace: true });
+        }
+      });
+  };
     return (
-        <>
+      <>
       <div className="w-full p-8 space-y-3 rounded-xl  text-gray-800">
-        <h1 className="text-3xl font-bold text-center">Register</h1>
+        <h1 className="text-3xl font-bold text-center text-white">Register</h1>
         <form
           onSubmit={handleSubmit(onSubmit)}
-         
-         
           className="space-y-6 ng-untouched ng-pristine ng-valid"
         >
           <div className="space-y-1 text-sm">
@@ -120,22 +232,23 @@ const Register = ({ setIsModal, isModal }) => {
             )}
           </div>
 
-          <button className="block w-full p-3 text-center rounded-sm text-lg text-gray-900 bg-violet-400">
+          <button className="block w-full p-3 text-center rounded-sm text-lg text-gray-900 bg modal-action">
             Sign Up
           </button>
         </form>
         <div className="flex items-center pt-4 space-x-1">
-          <div className="flex-1 h-px sm:w-16 bg-gray-700"></div>
-          <p className="px-3 text-md text-gray-800">
+          <div className="flex-1 h-px sm:w-16 bg-white"></div>
+          <p className="px-3 text-md text-white">
             Login with social accounts
           </p>
-          <div className="flex-1 h-px sm:w-16 bg-gray-700"></div>
+          <div className="flex-1 h-px sm:w-16 bg-white"></div>
         </div>
         <div className="my-6 space-y-4">
           <button
             aria-label="Login with Google"
             type="button"
             className="flex items-center justify-center w-full p-4 space-x-4 border rounded-md hover:bg-gray-800 transition-colors duration-700 hover:text-gray-200 border-gray-800"
+            onClick={googleHandler}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -144,14 +257,14 @@ const Register = ({ setIsModal, isModal }) => {
             >
               <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
             </svg>
-            <p>Login with Google</p>
+            <p className='text-white bg'>Login with Google</p>
           </button>
         </div>
-        <p className="text-sm text-center sm:px-6 text-gray-500">
+        <p className="text-sm text-center sm:px-6 text-white">
           Already have an account?
           <span
             rel="noopener noreferrer"
-            className="underline text-gray-800 cursor-pointer"
+            className="underline  cursor-pointer"
             onClick={() => setIsModal(!isModal)}
           >
             Sign In
@@ -159,6 +272,7 @@ const Register = ({ setIsModal, isModal }) => {
         </p>
       </div>
     </>
+  
     );
 };
 
